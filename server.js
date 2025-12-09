@@ -1,12 +1,12 @@
-// server.js (Menggunakan Sintaks ESM - Solusi A)
+// server.js (CommonJS)
 
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
 
-// ⚠️ Catatan Penting: Dalam ESM, path relatif memerlukan ekstensi file (.js)
-import pesananRoutes from './src/routes/pesananRoutes.js';
-import authRoutes from './src/routes/authRoutes.js';
+// Menggunakan require() untuk modul routes
+const pesananRoutes = require('./src/routes/pesananRoutes.js');
+const authRoutes = require = ('./src/routes/authRoutes.js');
 
 dotenv.config();
 const app = express();
@@ -21,5 +21,5 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/pesanan", pesananRoutes);
 
-// 🔑 KUNCI VERCEL (Dalam ESM): Gunakan 'export default'
-export default app;
+// KUNCI VERCEL (CommonJS): Menggunakan module.exports
+module.exports = app;
