@@ -1,8 +1,8 @@
-// File: src/controllers/authController.js
+// src/controllers/authController.js (CommonJS)
 
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const prisma = new PrismaClient();
 
@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 const GLOBAL_JWT_SECRET = process.env.JWT_SECRET || 'skyfly_kunci_rahasia_anda_harus_panjang'; 
 
 // Fungsi untuk Registrasi User
-export const register = async (req, res) => {
+const register = async (req, res) => {
     const { identifier, password, namaLengkap } = req.body;
 
     if (!identifier || !password || !namaLengkap) {
@@ -61,7 +61,7 @@ export const register = async (req, res) => {
                 email: newUser.email, 
                 nomorHp: newUser.nomorHp, 
                 namaLengkap: newUser.namaLengkap,
-                role: userRole // Kirim role yang sudah di-trim
+                role: userRole 
             }
         });
 
@@ -72,7 +72,7 @@ export const register = async (req, res) => {
 };
 
 // Fungsi untuk Login User
-export const login = async (req, res) => {
+const login = async (req, res) => {
     const { identifier, password } = req.body; 
 
     if (!identifier || !password) {
@@ -112,7 +112,7 @@ export const login = async (req, res) => {
                 email: user.email, 
                 nomorHp: user.nomorHp, 
                 namaLengkap: user.namaLengkap,
-                role: userRole // Kirim role yang sudah di-trim
+                role: userRole
             }
         });
 
@@ -121,4 +121,10 @@ export const login = async (req, res) => {
         res.status(500).json({ message: "Terjadi kesalahan server." });
     }
     
+};
+
+// Mengekspor semua fungsi yang akan digunakan di routes
+module.exports = {
+    register,
+    login
 };
