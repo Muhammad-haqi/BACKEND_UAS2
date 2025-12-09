@@ -1,6 +1,8 @@
-import express from 'express';
-// Pastikan .js ditambahkan
-import { register, login } from '../controllers/authController.js'; 
+// src/routes/authRoutes.js (CommonJS)
+
+const express = require('express');
+// Menggunakan require() untuk import fungsi dari controller
+const { register, login } = require('../controllers/authController.js'); 
 
 const router = express.Router();
 
@@ -10,4 +12,5 @@ router.post('/register', register);
 // Route untuk login user
 router.post('/login', login);
 
-export default router;
+// Menggunakan module.exports
+module.exports = router;
