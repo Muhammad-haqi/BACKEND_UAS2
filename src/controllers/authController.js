@@ -1,4 +1,4 @@
-// src/controllers/authController.js (CommonJS)
+// src/controllers/authController.js (FIXED CommonJS)
 
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 const prisma = new PrismaClient();
 
-// 🚨 Pastikan GLOBAL_JWT_SECRET ini sama persis dengan yang ada di verifyToken.js!
+// Ambil dari Environment Variable Vercel
 const GLOBAL_JWT_SECRET = process.env.JWT_SECRET || 'skyfly_kunci_rahasia_anda_harus_panjang'; 
 
 // Fungsi untuk Registrasi User
@@ -48,7 +48,6 @@ const register = async (req, res) => {
             data: userData,
         });
 
-        // 🔑 PERBAIKAN: Gunakan .trim() pada role sebelum digunakan di token
         const userRole = newUser.role ? newUser.role.trim() : 'user';
 
         const token = jwt.sign({ userId: newUser.id, role: userRole }, GLOBAL_JWT_SECRET, { expiresIn: '1d' });
@@ -61,7 +60,7 @@ const register = async (req, res) => {
                 email: newUser.email, 
                 nomorHp: newUser.nomorHp, 
                 namaLengkap: newUser.namaLengkap,
-                role: userRole 
+                role: userRole
             }
         });
 
@@ -99,7 +98,6 @@ const login = async (req, res) => {
             return res.status(401).json({ message: "Kredensial tidak valid." });
         }
 
-        // 🔑 PERBAIKAN: Gunakan .trim() untuk memastikan role yang dikirim ke frontend bersih
         const userRole = user.role ? user.role.trim() : 'user';
 
         const token = jwt.sign({ userId: user.id, role: userRole }, GLOBAL_JWT_SECRET, { expiresIn: '1d' });
@@ -120,10 +118,9 @@ const login = async (req, res) => {
         console.error('Error saat login:', error);
         res.status(500).json({ message: "Terjadi kesalahan server." });
     }
-    
 };
 
-// Mengekspor semua fungsi yang akan digunakan di routes
+// KUNCI: Mengekspor semua fungsi sebagai objek CommonJS
 module.exports = {
     register,
     login
